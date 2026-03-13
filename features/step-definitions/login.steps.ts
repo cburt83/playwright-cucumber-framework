@@ -17,8 +17,8 @@ Then('I should be redirected to the products page', async function (this: Custom
 
 
 When('I login with invalid credentials', async function (this: CustomWorld) {
- await this.loginPage.login('invalid_user', 'invalid_password');
- });
+  await this.loginPage.login('invalid_user', 'invalid_password');
+});
 
 
 Then('I should see the error message {string}', async function (this: CustomWorld, message: string) {
@@ -26,8 +26,8 @@ Then('I should see the error message {string}', async function (this: CustomWorl
 });
 
 Given('I am logged in with valid credentials', async function () {
-    this.loginPage = new LoginPage(this.page);
-    await this.loginPage.navigate('https://www.saucedemo.com/');
-    await this.loginPage.login('standard_user', 'secret_sauce');
-    await this.loginPage.assertUrlContains('inventory.html');
-         });
+  this.loginPage = new LoginPage(this.page);
+  await this.loginPage.navigate('https://www.saucedemo.com/');
+  await this.loginPage.login('standard_user', 'secret_sauce');
+  await this.loginPage.assertUrlContains('inventory.html');
+});
