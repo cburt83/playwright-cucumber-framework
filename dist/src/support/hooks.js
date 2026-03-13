@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cucumber_1 = require("@cucumber/cucumber");
 const test_1 = require("@playwright/test");
 (0, cucumber_1.Before)(async function () {
-    this.browser = await test_1.chromium.launch({ headless: false });
+    this.browser = await test_1.chromium.launch({ headless: true });
     this.context = await this.browser.newContext({
         recordVideo: { dir: 'videos/' }
     });
