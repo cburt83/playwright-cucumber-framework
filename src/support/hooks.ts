@@ -19,7 +19,7 @@ Before(async function (this: CustomWorld) {
 After(async function (scenario) {
   if (scenario.result?.status === Status.FAILED) {
     const screenshot = await this.page.screenshot({
-      path: `./reports/screenshots/${scenario.pickle.name}.png`,
+      path: `./test-results/screenshots/${scenario.pickle.name}.png`,
       fullPage: true
     });
     this.attach(screenshot, 'image/png');

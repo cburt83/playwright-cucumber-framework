@@ -1,12 +1,11 @@
 {
-  "name": "cucumberdemo",
+  "name": "cucumberuidemo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "cucumber-js --config cucumber.json --require-module ts-node/register",
-    "report": "node test-results/generate-html-report.js"
-
+"scripts": {
+  "test": "cucumber-js --config cucumber.json --require-module ts-node/register && node test-results/generate-html-report.js",
+  "report": "node test-results/generate-html-report.js"
   },
   "keywords": [],
   "author": "",

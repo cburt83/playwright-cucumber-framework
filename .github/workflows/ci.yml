@@ -1,64 +1,40 @@
-name: Playwright Cucumber Tests
+stages:
+  - build
+  - test
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+# 1. Build the Docker image that contains Playwright + your project
+build_image:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - docker build -t playwright-cucumber-ui-framework .
+    - docker save playwright-cucumber-ui-framework -o playwright-cucumber-ui-framework.tar
+  artifacts:
+    paths:
+      - playwright-cucumber-ui-framework.tar
+    expire_in: 1 week
 
-jobs:
-  test:
-    name: Playwright Cucumber Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: Run tests
-        run: npm test
-
-      - name: Generate HTML report
-        run: node reports/generate-html-report.js
-
-      - name: Upload HTML report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-report
-          path: reports/html/
-
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: reports/screenshots/
-
-      - name: Upload videos
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: videos
-          path: videos/
-
-      - name: Upload traces
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: traces
-          path: test-results/
+# 2. Run tests inside the image and collect reports
+run_tests:
+  stage: test
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - docker load -i playwright-cucumber-ui-framework.tar
+    - docker run --rm \
+        -v "$CI_PROJECT_DIR/test-results:/app/test-results" \
+        playwright-cucumber-ui-framework
+  artifacts:
+  when: always
+  expose_as: "UI Test Report"
+  paths:
+    - test-results/
+    - test-results/html/index.html
+  expire_in: 1 week
