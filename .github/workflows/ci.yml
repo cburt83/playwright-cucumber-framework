@@ -2,7 +2,7 @@ name: parallel-ci
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "**" ]
   pull_request:
 
 jobs:
