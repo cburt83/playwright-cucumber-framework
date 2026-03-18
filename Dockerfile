@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/playwright:v1.43.0-jammy
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+# Run tests when the container starts
+CMD ["npm", "test"]

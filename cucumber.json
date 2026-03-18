@@ -9,9 +9,10 @@
     ],
     "format": [
       "progress",
-      "json:reports/cucumber-report.json"
+      "json:test-results/report.json"
     ],
     "publishQuiet": true,
     "parallel": 2
   }
 }
+
